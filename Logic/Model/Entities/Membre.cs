@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nutritia
 {
-    public class Membre
+    public class Membre : ICloneable
     {
         #region Proprietes
         public int? IdMembre { get; set; }
@@ -40,9 +40,9 @@ namespace Nutritia
 		/// Méthode qui retourne une copie indépendente de cette objet
 		/// </summary>
 		/// <returns></returns>
-		public Membre Cloner()
+		public Object Clone ()
 		{
-			return (Membre)this.MemberwiseClone();
+			return MemberwiseClone();
 		}
     }
 }

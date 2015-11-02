@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nutritia
 {
-    public class Aliment : ICloneable
+    public class Aliment : ICloneable, IEquatable<Aliment>
     {
         #region Proprietes
         public int? IdAliment { get; set; }
@@ -28,18 +28,20 @@ namespace Nutritia
         /// Méthode permettant de comparer deux objets Aliment ensemble.
         /// Contrairement à la méthode de base, elle compare seulement avec l'id.
         /// </summary>
-        /// <param name="objet"></param>
+        /// <param name="right"></param>
         /// <returns></returns>
-        public override bool Equals(Object objet)
+        public override bool Equals(Object right)
         {
-            if(objet == null || GetType() != objet.GetType())
-            {
+            if (object.ReferenceEquals(right, null))
                 return false;
-            }
 
-            Aliment aliment = (Aliment)objet;
+            if (object.ReferenceEquals(this, right))
+                return true;
 
-            return (IdAliment == aliment.IdAliment);
+            if (this.GetType() != right.GetType())
+                return false;
+
+            return this.Equals(right as Aliment);
         }
 
         /// <summary>
@@ -49,6 +51,11 @@ namespace Nutritia
         public object Clone()
         {
             return MemberwiseClone();
+        }
+
+        public bool Equals(Aliment other)
+        {
+            return (IdAliment == other.IdAliment);
         }
     }
 }

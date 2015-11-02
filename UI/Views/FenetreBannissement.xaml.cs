@@ -88,7 +88,7 @@ namespace Nutritia.UI.Views
 			TousLesMembres = TousLesMembres.OrderBy(membre => membre.NomUtilisateur).ToList();
 
 			foreach (var membre in TousLesMembres)
-				(membre.EstBanni ? LstBanni : LstMembre).Add(membre.Cloner()); // Appel une copie indépendante
+				(membre.EstBanni ? LstBanni : LstMembre).Add((Membre)membre.Clone()); // Appel une copie indépendante
 
 
 			dgBanni.ItemsSource = LstBanni;
