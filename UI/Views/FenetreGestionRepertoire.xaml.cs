@@ -65,8 +65,8 @@ namespace Nutritia.UI.Views
             listeAlimentsModifPlat = ServiceFactory.Instance.GetService<IAlimentService>().RetrieveAll();
             listePlats = ServiceFactory.Instance.GetService<IPlatService>().RetrieveAll();
 
-            listeAliments = listeAliments.OrderBy(aliment => aliment.Nom).ToList();
-            listePlats = listePlats.OrderBy(plat => plat.Nom).ToList();
+            //listeAliments = listeAliments.OrderBy(aliment => aliment.Nom).ToList();
+            //listePlats = listePlats.OrderBy(plat => plat.Nom).ToList();
 
             Construire_Accordeon(accordeon_aliments);
             Construire_Accordeon(accordeon_aliments_modif);
@@ -249,6 +249,12 @@ namespace Nutritia.UI.Views
             {
                 //Inserer_Donnees();
                 Inserer_Aliment();
+
+                accordeon_aliments.Items.Clear();
+                accordeon_aliments_modif.Items.Clear();
+
+                Construire_Accordeon(accordeon_aliments);
+                Construire_Accordeon(accordeon_aliments_modif);
 
                 MessageBoxResult resultat;
                 resultat = MessageBox.Show(FenetreGestionRepertoire.SuccessAjoutAlimentMessage
