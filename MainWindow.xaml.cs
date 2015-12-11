@@ -473,7 +473,6 @@ namespace Nutritia
             CreerBoiteNotification();
             toolBarNotif.Items.Remove((Button)sender);
 
-            App.MembreCourant.DerniereMaj = DateTime.Now;
             ServiceFactory.Instance.GetService<IMembreService>().Update(App.MembreCourant);
 
             MettreAJourNbrNotif();
@@ -494,6 +493,15 @@ namespace Nutritia
             {
                 FenetreAide fenetreAide = new FenetreAide(presenteurContenu.Content.GetType().Name);
                 fenetreAide.Show();
+            }
+            if (e.Key == Key.F2)
+            {
+                String str = "";
+                foreach (Plat item in NvPlatAffichable)
+                {
+                    str += item.Nom + "\n";
+                }
+                MessageBox.Show(str);
             }
         }
 
