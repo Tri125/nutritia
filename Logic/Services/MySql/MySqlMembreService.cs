@@ -254,7 +254,7 @@ namespace Nutritia
             {
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
-                    string requete = string.Format("UPDATE Membres SET nom = '{0}' ,prenom = '{1}', taille = {2}, masse = {3}, dateNaissance = '{4}', nomUtilisateur = '{5}', motPasse = '{6}', estAdmin = {7}, estBanni = {8}, idLangue = (SELECT idLangue FROM Langues WHERE IETF = '{9}') WHERE idMembre = {10}", membre.Nom, membre.Prenom, membre.Taille, membre.Masse, membre.DateNaissance.ToString("yyyy-MM-dd"), membre.NomUtilisateur, membre.MotPasse, membre.EstAdministrateur, membre.EstBanni, membre.LangueMembre.IETF, membre.IdMembre);
+                    string requete = string.Format("UPDATE Membres SET nom = '{0}' ,prenom = '{1}', taille = {2}, masse = {3}, dateNaissance = '{4}', nomUtilisateur = '{5}', motPasse = '{6}', estAdmin = {7}, estBanni = {8}, idLangue = (SELECT idLangue FROM Langues WHERE IETF = '{9}'), derniereMaj = CURRENT_TIMESTAMP WHERE idMembre = {10}", membre.Nom, membre.Prenom, membre.Taille, membre.Masse, membre.DateNaissance.ToString("yyyy-MM-dd"), membre.NomUtilisateur, membre.MotPasse, membre.EstAdministrateur, membre.EstBanni, membre.LangueMembre.IETF, membre.IdMembre);
 
                     connexion.Query(requete);
 
