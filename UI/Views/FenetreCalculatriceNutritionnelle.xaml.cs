@@ -22,23 +22,31 @@ namespace Nutritia.UI.Views
 	/// </summary>
 	public partial class FenetreCalculatriceNutritionelle : UserControl
 	{
-
+		// Liste de plat et d'aliment qui compose le plateau
 		private List<Plat> PlateauPlat { get; set; }
 		private List<Aliment> PlateauAliment { get; set; }
-		// Cet Aliment sert de totaux de tous les Aliments/Ingrédients du plateau
+
+		// Ce dictionnaire sert de total de tous les aliments d'un plat ou d'un groupe de plat
 		private Dictionary<string, double> ValeurNutritive { get; set; }
+
+		// Liste de tous les plats et aliments de la BD
 		private List<Plat> LstPlat { get; set; }
 		private List<Aliment> LstAliment { get; set; }
-
+		
+		// Liste de tous les plats et aliments retournés par la recherche
 		private List<Plat> BoiteRechPlat { get; set; }
 		private List<Aliment> BoiteRechAliment { get; set; }
 
+		// Permet de detecter quel aliments et plats sont déja présents pour incrémenter le compteur
 		private List<int?> lstIdPresent { get; set; }
+
+		// Sous-division de l'écran qui sont raffraichis fréquement
 		private SousEcran Plateau { get; set; }
 		public SousEcran BoiteResultat { get; set; }
 		private SousEcran2 TabValeurNutritionelle { get; set; }
 
-		public List<int> LstIdPlatADerouler { get; set; }
+		// Liste de plat qui affichent les aliments qui les composes
+		public List<int> LstIdPlatExplose { get; set; }
 
 		public FenetreCalculatriceNutritionelle()
 		{
@@ -51,6 +59,10 @@ namespace Nutritia.UI.Views
 			ConfigurerCalculatrice();
 		}
 
+		/// <summary>
+		/// Constructeur qui accepte un plat pour l'envoyer dans le plateau à la construction
+		/// </summary>
+		/// <param name="platEnvoye"></param>
 		public FenetreCalculatriceNutritionelle(Plat platEnvoye)
 		{
             App.Current.MainWindow.Title = FenetreCalculatriceNutritionnelle.Titre;
@@ -59,12 +71,16 @@ namespace Nutritia.UI.Views
 			InitializeComponent();
 			Initialiser();
 
-			// On déssine le plateau s'il a un plat passé en paramètre (apellé ailleur que dans les menus principaux)
+			// On déssine le plateau s'il a un plat passé en paramètre (appellé ailleur que dans les menus principaux)
 			PlateauPlat.Add(platEnvoye);
 
 			ConfigurerCalculatrice();
 		}
 
+		/// <summary>
+		/// Constructeur qui accepte une liste plat pour les envoyer dans le plateau à la construction
+		/// </summary>
+		/// <param name="lstPlatEnvoye"></param>
 		public FenetreCalculatriceNutritionelle(List<Plat> lstPlatEnvoye)
 		{
             App.Current.MainWindow.Title = FenetreCalculatriceNutritionnelle.Titre;
@@ -78,6 +94,7 @@ namespace Nutritia.UI.Views
 			ConfigurerCalculatrice();
 		}
 
+		// Permet d'initialiser toutes les variables qu'utilisent la calculatrice
 		private void Initialiser()
 		{
 			Plateau = new SousEcran();
@@ -96,9 +113,12 @@ namespace Nutritia.UI.Views
 			PlateauAliment = new List<Aliment>();
 			ValeurNutritive = new Dictionary<string, double>();
 
-			LstIdPlatADerouler = new List<int>();
+			LstIdPlatExplose = new List<int>();
 		}
 
+		/// <summary>
+		/// Construit les listes et les sections affichables de la fenêtre
+		/// </summary>
 		private void ConfigurerCalculatrice()
 		{ 
 			// On génere l'écran des valeurs nutritives
@@ -112,7 +132,7 @@ namespace Nutritia.UI.Views
 			BoiteRechPlat.AddRange(LstPlat);
 			BoiteRechAliment.AddRange(ServiceFactory.Instance.GetService<IAlimentService>().RetrieveAll());
 
-			// Dispatch des aliment trié par nom dans les différentes parties de l'accordéon
+			// On tri la liste des plats pour l'afficher dans l'ordre dans l'accordéon
 			LstPlat = LstPlat.OrderBy(plat => plat.Nom).ToList();
 
 			// Puis pour la barre de recherche
@@ -142,6 +162,10 @@ namespace Nutritia.UI.Views
 			FormerItemAccordeon(FenetreCalculatriceNutritionnelle.Dejeuner);
 		}
 
+		/// <summary>
+		/// Génere un item d'accordéon pour la section passée en paramètre
+		/// </summary>
+		/// <param name="nomItem"></param>
 		public void FormerItemAccordeon(string nomItem)
 		{
 			AccordionItem itemAccordeon = new AccordionItem();
@@ -164,7 +188,7 @@ namespace Nutritia.UI.Views
 
 
 		/// <summary>
-		/// Méthode qui défini le filtre de recherche d'un Aliment pour SearchBox
+		/// Méthode qui défini le filtre de recherche d'un Aliment pour la SearchBox
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -174,12 +198,16 @@ namespace Nutritia.UI.Views
 			BoiteRechPlat = LstPlat.FindAll(P => EnleverAccent(P.Nom).ToLower().Contains(EnleverAccent(champ).ToLower())).OrderBy(plat => plat.Nom).ToList();
 		}
 
+		/// <summary>
+		/// Remplace les accens par les lettres d'origines
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns>chaine sans accent</returns>
 		public string EnleverAccent(string text)
 		{
-			byte[] tempBytes;
-			tempBytes = System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(text);
-			string asciiStr = System.Text.Encoding.UTF8.GetString(tempBytes);
-			return asciiStr;
+			byte[] tmpBytes;
+			tmpBytes = System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(text);
+			return System.Text.Encoding.UTF8.GetString(tmpBytes);			
 		}
 
 		/// <summary>
@@ -203,7 +231,7 @@ namespace Nutritia.UI.Views
 				if (btnPlat != null)
 				{
 					Plateau.stackEcran.Children.Add(btnPlat);
-					if (LstIdPlatADerouler.Any(idP => idP == plat.IdPlat))
+					if (LstIdPlatExplose.Any(idP => idP == plat.IdPlat))
 					{
 						foreach (var aliment in plat.ListeIngredients)
 						{
@@ -451,7 +479,8 @@ namespace Nutritia.UI.Views
 		}
 
 		/// <summary>
-		/// Evenement qui ajoute un plat à dérouler dans la liste ou l'hôte de la liste
+		/// Evenement qui ajoute ou enlève un plat à dérouler dans la liste de plats explosés
+		/// suivant s'il y est déja présent
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -462,19 +491,19 @@ namespace Nutritia.UI.Views
 			int idPlatCourrant = Convert.ToInt32(btnPlat.Uid);
 			if (Keyboard.Modifiers == ModifierKeys.Shift)
 			{
-				if (LstIdPlatADerouler.Count != 0)
-					LstIdPlatADerouler.Clear();
+				if (LstIdPlatExplose.Count != 0)
+					LstIdPlatExplose.Clear();
 				else
 					foreach (var plat in PlateauPlat)
-						LstIdPlatADerouler.Add((int)plat.IdPlat);
+						LstIdPlatExplose.Add((int)plat.IdPlat);
 			}
 
 			else
 			{
-				if (LstIdPlatADerouler.Any(idP => idP == idPlatCourrant))
-					LstIdPlatADerouler.Remove(idPlatCourrant);
+				if (LstIdPlatExplose.Any(idP => idP == idPlatCourrant))
+					LstIdPlatExplose.Remove(idPlatCourrant);
 				else
-					LstIdPlatADerouler.Add(idPlatCourrant);
+					LstIdPlatExplose.Add(idPlatCourrant);
 			}
 
 			DessinerPlateau();
@@ -513,7 +542,7 @@ namespace Nutritia.UI.Views
 			{
 				// Si on vide ce plat, il faut enlever son id de la liste des plats à dérouler
 				if (nbrItemActuel == iteration)
-					LstIdPlatADerouler.Remove(Convert.ToInt32(btn.Uid));
+					LstIdPlatExplose.Remove(Convert.ToInt32(btn.Uid));
 				for (int i = 0; i < iteration; i++)
 					PlateauPlat.Remove(PlateauPlat.Last(P => P.IdPlat == Convert.ToInt32(btn.Uid)));
 
@@ -667,7 +696,7 @@ namespace Nutritia.UI.Views
 		}
 
 		/// <summary>
-		/// Evenement qui Appelle des méthode pour mettre à jour la boite de 
+		/// Evenement qui appelle des méthodes pour mettre à jour la boite de 
 		/// recherche en fonction du texte écrit par l'utilisateur
 		/// </summary>
 		/// <param name="sender"></param>
@@ -695,6 +724,11 @@ namespace Nutritia.UI.Views
 			scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
 		}
 
+		/// <summary>
+		/// Détecte un raccourcis du clavier
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void UserControl_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Delete)
@@ -702,20 +736,31 @@ namespace Nutritia.UI.Views
 				{
 					PlateauAliment.Clear();
 					PlateauPlat.Clear();
-					LstIdPlatADerouler.Clear();
+					LstIdPlatExplose.Clear();
 					DessinerPlateau();
 				}
 		}
 
+		/// <summary>
+		/// Lors du clique sur la poubelle, on vide tous ce que le plateau contient
+		/// et on le redessine pour l'actualiser.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnVider_Click(object sender, RoutedEventArgs e)
 		{
 			PlateauAliment.Clear();
 			PlateauPlat.Clear();
-			LstIdPlatADerouler.Clear();
+			LstIdPlatExplose.Clear();
 			DessinerPlateau();
 
 		}
 
+		/// <summary>
+		/// Pour changer le titre de la fenêtre lors d'un changement de langue.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void CultureManager_UICultureChanged(object sender, EventArgs e)
         {
             App.Current.MainWindow.Title = FenetreCalculatriceNutritionnelle.Titre;

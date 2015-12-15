@@ -28,10 +28,10 @@ namespace Nutritia
 	public partial class MainWindow : Window, IApplicationService
 	{
 		private const int SLEEP_NOTIFICATION_TIME = 500;
-		// Thread asincrone qui regarde les modifications dans la BD
-		private Thread tNotif { get; set; }
+		// Thread asyncrone qui surveille les modifications dans la BD
+		private Thread ThreadVerifChangement { get; set; }
 
-		// Permet d'interargir avec le threas asyncrone pour sauvegardé les nouveau plats dan la BD
+		// Permet d'interargir avec le threads asyncrones pour sauvegarder les nouveaux plats dans la BD
 		static public List<Plat> NouveauxPlats { get; set; }
 		public List<Plat> NvPlatAffichable { get; set; }
 		public string MessageNouvelleVersion { get; set; }
@@ -65,9 +65,9 @@ namespace Nutritia
 			presenteurContenu.Content = new MenuPrincipal();
 
 			// On lance le thread
-			tNotif = new Thread(VerifierChangementBD);
-			tNotif.IsBackground = true;
-			tNotif.Start();
+			ThreadVerifChangement = new Thread(VerifierChangementBD);
+			ThreadVerifChangement.IsBackground = true;
+			ThreadVerifChangement.Start();
 		}
 
 
@@ -175,7 +175,6 @@ namespace Nutritia
 			}
 		}
 
-
 		private void ConfigurerTaille()
 		{
 			Width = App.APP_WIDTH;
@@ -212,183 +211,15 @@ namespace Nutritia
 		public void ChangerVue<T>(T vue)
 		{
 			presenteurContenu.Content = vue as UserControl;
-		}
+		}		
 
 		/// <summary>
-		/// Ouvre la fenêtre des paramètres en modal
+		/// Méthode appelé par le thread des changements pour:
+		/// - Expulser un utilisateur nouvellement banni
+		/// - Expulser un utilisateur de l'environnement admin qui a perdu le statut d'admin
+		/// - Actualiser le menu principal d'un utilisateur connécté en cas de modif du statut admin
+		/// - Actualiser la liste des plats dans la fenêtre de vote lors d'un nouveau vote
 		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btnParam_Click(object sender, RoutedEventArgs e)
-		{
-			(new FenetreParametres()).ShowDialog();
-		}
-
-		/// <summary>
-		/// Permet, suivant le contexte, de revenir au menu précédent
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btnRetour_Click(object sender, RoutedEventArgs e)
-		{
-			App.Current.MainWindow.ResizeMode = ResizeMode.CanMinimize;
-			App.Current.MainWindow.Width = App.APP_WIDTH;
-			App.Current.MainWindow.Height = App.APP_HEIGHT;
-			App.Current.MainWindow.WindowState = WindowState.Normal;
-
-			if (presenteurContenu.Content is FenetreListeEpicerie)
-				ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new FenetreGenerateurMenus(FenetreListeEpicerie.MenuGenere, FenetreListeEpicerie.NbColonnesMenu));
-			else
-			{
-				if (String.IsNullOrEmpty(App.MembreCourant.NomUtilisateur))
-					ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new MenuPrincipal());
-				else
-				{
-					if (presenteurContenu.Content is Bannissement || presenteurContenu.Content is GestionAdmin || presenteurContenu.Content is GestionRepertoire || presenteurContenu.Content is FenetreDons)
-						ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new MenuAdministrateur());
-					else
-						ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new MenuPrincipalConnecte());
-				}
-			}
-		}
-
-		/// <summary>
-		/// Ouvre la fenêtre des infos sur l'application en modal
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btnAPropos_Click(object sender, RoutedEventArgs e)
-		{
-			(new FenetreAPropos()).ShowDialog();
-			//ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new FenetreAPropos());
-		}
-
-		/// <summary>
-		/// Ouvre la fenêtre d'aide de l'application en modeless
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btnAide_Click(object sender, RoutedEventArgs e)
-		{
-			FenetreAide fenetreAide = new FenetreAide(presenteurContenu.Content.GetType().Name);
-			fenetreAide.Show();
-		}
-
-
-		/// <summary>
-		/// Formate les nouveaux plats pour les affichers lors du clique sur le bouton de notif
-		/// </summary>
-		private void CreerBoiteNotification()
-		{
-			StringBuilder sbNotifs = new StringBuilder();
-			sbNotifs.AppendLine("     Nouveaux plats").AppendLine("-----------------------------------------").AppendLine();
-			foreach (var plat in NvPlatAffichable)
-			{
-				sbNotifs.Append("+ ").AppendLine(plat.Nom).AppendLine();
-			}
-
-			sbNotifs.AppendLine("-----------------------------------------").AppendLine("Voulez-vous ouvrir ces ").AppendLine("plats avec la calculatrice ?");
-
-			if (MessageBox.Show(
-					 sbNotifs.ToString(),
-					 "Nouveaux plats disponibles",
-					 MessageBoxButton.YesNo,
-					 MessageBoxImage.Information) == MessageBoxResult.Yes)
-			{
-				// Si l'utilisateur à répondu oui pour afficher les plats dans la calculatrice ...<
-				Window windowCalculatrice = new Window();
-				windowCalculatrice.Width = App.APP_WIDTH;
-				windowCalculatrice.Height = App.APP_HEIGHT;
-				windowCalculatrice.ResizeMode = ResizeMode.CanMinimize;
-				windowCalculatrice.Title = "Nutritia - Calculatrice nutritionnelle";
-				windowCalculatrice.Icon = new BitmapImage(new Uri("pack://application:,,,/UI/Images/logoIconPetit.png"));
-				Grid grdContenu = new Grid();
-				ImageBrush brush = new ImageBrush();
-				brush.Opacity = 0.3;
-				brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/UI/Images/background.jpg"));
-				grdContenu.Background = brush;
-				grdContenu.Children.Add(new FenetreCalculatriceNutritionelle(NvPlatAffichable));
-				windowCalculatrice.Content = grdContenu;
-				windowCalculatrice.Show();
-			}
-
-
-
-		}
-
-		/// <summary>
-		/// Génere le nbr de notification pour le dessiner à côté de l'image de notif
-		/// </summary>
-		private void DessinerNotificationNvPlat()
-		{
-			// On le déclare accéssible a toute la fonction car on s'en sert dans les deux contextes
-			Button btnNouveauxPlats = new Button();
-            if (!String.IsNullOrEmpty(App.MembreCourant.NomUtilisateur))
-			{
-				if (NvPlatAffichable.Count > 0)
-				{
-					foreach (var contenu in toolBarNotif.Items)
-						if (contenu is Button)
-							if (((Button)contenu).Name == "notifNvPlat")
-								btnNouveauxPlats = (Button)contenu;
-
-					btnNouveauxPlats.Name = "notifNvPlat";
-
-					if (btnNouveauxPlats.Content is Label)
-					{
-						((Label)btnNouveauxPlats.Content).Content = "Nouveaux plats disponibles (" + NvPlatAffichable.Count.ToString() + ")";
-					}
-					else
-					{
-						Label lblNvPlat = new Label();
-						lblNvPlat.Content = "Nouveaux plats disponibles (";
-						lblNvPlat.Content += NvPlatAffichable.Count.ToString() + ")";
-						btnNouveauxPlats.Content = lblNvPlat;
-						btnNouveauxPlats.Click += btnNouveauxPlats_Click;
-						toolBarNotif.Items.Add(btnNouveauxPlats);
-					}
-					MettreAJourNbrNotif();
-				}
-
-			}
-			else
-			{
-				if(NvPlatAffichable.Count > 0)
-				{
-					NvPlatAffichable.Clear();
-					foreach (Button notif in toolBarNotif.Items)
-						if (notif.Name == "notifNvPlat")
-							btnNouveauxPlats = notif;
-
-					toolBarNotif.Items.Remove(btnNouveauxPlats);
-					MettreAJourNbrNotif();
-					previousTime = DateTime.MinValue;
-				}
-			}
-
-
-		}
-
-		/// <summary>
-		/// Génere le nbr de notification pour le dessiner à côté de l'image de notif
-		/// </summary>
-		private void DessinerNotificationNvnvVersion()
-		{
-
-			if (MessageNouvelleVersion != "")
-			{
-				Button btnNouvelleVersion = new Button();
-				Label lblNvPlat = new Label();
-				lblNvPlat.Content = "Nouvelle version disponible";
-				btnNouvelleVersion.Content = lblNvPlat;
-				btnNouvelleVersion.Click += btnNouvelleVersion_Click;
-				toolBarNotif.Items.Add(btnNouvelleVersion);
-
-				MettreAJourNbrNotif();
-			}
-
-		}
-
 		public void AppliquerNouveauChangementStatut()
 		{
 			if (!String.IsNullOrEmpty(App.MembreCourant.NomUtilisateur))
@@ -428,11 +259,157 @@ namespace Nutritia
 
 		}
 
-		private void Window_Closing(object sender, CancelEventArgs e)
+		// -------------- Notifications ------------------
+
+		/// <summary>
+		/// Méthode qui regarde le nombre de bouton dans la barre d'outil des notifs et qui indique ce nombre à côté de l'icone de notif
+		/// </summary>
+		private void MettreAJourNbrNotif()
 		{
-			tNotif.Abort();
+			string txtNbrNotif = (toolBarNotif.Items.Count).ToString(); // Moins l'icone de notification et le num de notif
+
+			if (txtNbrNotif == "0")
+				txtNbrNotif = "";
+			nbrNotif.Text = txtNbrNotif;
 		}
 
+		/// <summary>
+		/// Crée un bouton qui se place dans la barre d'outil des notifs
+		/// </summary>
+		private void DessinerNotificationNvnvVersion()
+		{
+
+			if (MessageNouvelleVersion != "")
+			{
+				Button btnNouvelleVersion = new Button();
+				Label lblNvPlat = new Label();
+				lblNvPlat.Content = "Nouvelle version disponible";
+				btnNouvelleVersion.Content = lblNvPlat;
+				btnNouvelleVersion.Click += btnNouvelleVersion_Click;
+				toolBarNotif.Items.Add(btnNouvelleVersion);
+
+				MettreAJourNbrNotif();
+			}
+
+		}
+
+		/// <summary>
+		/// Crée un bouton qui se place dans la barre d'outil des notifs et indique le nombre de nouveaux plats
+		/// </summary>
+		private void DessinerNotificationNvPlat()
+		{
+			// On le déclare accéssible a toute la fonction car on s'en sert dans les deux contextes
+			Button btnNouveauxPlats = new Button();
+			if (!String.IsNullOrEmpty(App.MembreCourant.NomUtilisateur))
+			{
+				if (NvPlatAffichable.Count > 0)
+				{
+					foreach (var contenu in toolBarNotif.Items)
+						if (contenu is Button)
+							if (((Button)contenu).Name == "notifNvPlat")
+								btnNouveauxPlats = (Button)contenu;
+
+					btnNouveauxPlats.Name = "notifNvPlat";
+
+					if (btnNouveauxPlats.Content is Label)
+					{
+						((Label)btnNouveauxPlats.Content).Content = "Nouveaux plats disponibles (" + NvPlatAffichable.Count.ToString() + ")";
+					}
+					else
+					{
+						Label lblNvPlat = new Label();
+						lblNvPlat.Content = "Nouveaux plats disponibles (";
+						lblNvPlat.Content += NvPlatAffichable.Count.ToString() + ")";
+						btnNouveauxPlats.Content = lblNvPlat;
+						btnNouveauxPlats.Click += btnNouveauxPlats_Click;
+						toolBarNotif.Items.Add(btnNouveauxPlats);
+					}
+					MettreAJourNbrNotif();
+				}
+
+			}
+			else
+			{
+				if (NvPlatAffichable.Count > 0)
+				{
+					NvPlatAffichable.Clear();
+					foreach (Button notif in toolBarNotif.Items)
+						if (notif.Name == "notifNvPlat")
+							btnNouveauxPlats = notif;
+
+					toolBarNotif.Items.Remove(btnNouveauxPlats);
+					MettreAJourNbrNotif();
+					previousTime = DateTime.MinValue;
+				}
+			}
+
+
+		}
+
+		/// <summary>
+		/// Formate les nouveaux plats pour les affichers lors du clique sur le bouton de notif
+		/// </summary>
+		private void CreerMessageNouveauxPlats()
+		{
+			StringBuilder sbNotifs = new StringBuilder();
+			sbNotifs.AppendLine("     Nouveaux plats").AppendLine("-----------------------------------------").AppendLine();
+			foreach (var plat in NvPlatAffichable)
+			{
+				sbNotifs.Append("+ ").AppendLine(plat.Nom).AppendLine();
+			}
+
+			sbNotifs.AppendLine("-----------------------------------------").AppendLine("Voulez-vous ouvrir ces ").AppendLine("plats avec la calculatrice ?");
+
+			if (MessageBox.Show(
+					 sbNotifs.ToString(),
+					 "Nouveaux plats disponibles",
+					 MessageBoxButton.YesNo,
+					 MessageBoxImage.Information) == MessageBoxResult.Yes)
+			{
+				// Si l'utilisateur à répondu oui pour afficher les plats dans la calculatrice ...<
+				Window windowCalculatrice = new Window();
+				windowCalculatrice.Width = App.APP_WIDTH;
+				windowCalculatrice.Height = App.APP_HEIGHT;
+				windowCalculatrice.ResizeMode = ResizeMode.CanMinimize;
+				windowCalculatrice.Title = "Nutritia - Calculatrice nutritionnelle";
+				windowCalculatrice.Icon = new BitmapImage(new Uri("pack://application:,,,/UI/Images/logoIconPetit.png"));
+				Grid grdContenu = new Grid();
+				ImageBrush brush = new ImageBrush();
+				brush.Opacity = 0.3;
+				brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/UI/Images/background.jpg"));
+				grdContenu.Background = brush;
+				grdContenu.Children.Add(new FenetreCalculatriceNutritionelle(NvPlatAffichable));
+				windowCalculatrice.Content = grdContenu;
+				windowCalculatrice.Show();
+			}
+
+		}
+
+
+		// ------------------------ ÉVENEMENTS --------------------------
+
+		/// <summary>
+		/// Détecte un raccourcis
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Window_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.F1)
+			{
+				FenetreAide fenetreAide = new FenetreAide(presenteurContenu.Content.GetType().Name);
+				fenetreAide.Show();
+			}
+		}
+
+		// ----------- Notification NvPlat / NvVersion -------------
+
+		/// <summary>
+		/// Configurer le message de nouvelle version.
+		/// Puis donne l'option à l'utilisateur de télécharger la nouvelle version.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnNouvelleVersion_Click(object sender, RoutedEventArgs e)
 		{
 			if (MessageBox.Show(
@@ -451,32 +428,94 @@ namespace Nutritia
 			MettreAJourNbrNotif();
 		}
 
+		/// <summary>
+		/// Lorsque l'utilisateur clique sur le bouton de nouveaux plats dans la bar de notif
+		/// -> On affiche tous les nouveaux plats en appellant la méthode "CreerMessageNouveauxPlats"
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnNouveauxPlats_Click(object sender, RoutedEventArgs e)
 		{
 			ServiceFactory.Instance.GetService<IMembreService>().Update(App.MembreCourant);
 
-			CreerBoiteNotification();
+			CreerMessageNouveauxPlats();
 			toolBarNotif.Items.Remove((Button)sender);
 			MettreAJourNbrNotif();
 		}
 
-		private void MettreAJourNbrNotif()
-		{
-			string txtNbrNotif = (toolBarNotif.Items.Count).ToString(); // Moins l'icone de notification et le num de notif
+		// ---------------------- ToolBar --------------------------
 
-			if (txtNbrNotif == "0")
-				txtNbrNotif = "";
-			nbrNotif.Text = txtNbrNotif;
-		}
-
-		private void Window_KeyDown(object sender, KeyEventArgs e)
+		/// <summary>
+		/// Permet, suivant le contexte, de revenir au menu précédent
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void btnRetour_Click(object sender, RoutedEventArgs e)
 		{
-			if (e.Key == Key.F1)
+			App.Current.MainWindow.ResizeMode = ResizeMode.CanMinimize;
+			App.Current.MainWindow.Width = App.APP_WIDTH;
+			App.Current.MainWindow.Height = App.APP_HEIGHT;
+			App.Current.MainWindow.WindowState = WindowState.Normal;
+
+			if (presenteurContenu.Content is FenetreListeEpicerie)
+				ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new FenetreGenerateurMenus(FenetreListeEpicerie.MenuGenere, FenetreListeEpicerie.NbColonnesMenu));
+			else
 			{
-				FenetreAide fenetreAide = new FenetreAide(presenteurContenu.Content.GetType().Name);
-				fenetreAide.Show();
+				if (String.IsNullOrEmpty(App.MembreCourant.NomUtilisateur))
+					ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new MenuPrincipal());
+				else
+				{
+					if (presenteurContenu.Content is Bannissement || presenteurContenu.Content is GestionAdmin || presenteurContenu.Content is GestionRepertoire || presenteurContenu.Content is FenetreDons)
+						ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new MenuAdministrateur());
+					else
+						ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new MenuPrincipalConnecte());
+				}
 			}
 		}
+
+		/// <summary>
+		/// Ouvre la fenêtre des paramètres en modal
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void btnParam_Click(object sender, RoutedEventArgs e)
+		{
+			(new FenetreParametres()).ShowDialog();
+		}
+
+		/// <summary>
+		/// Ouvre la fenêtre d'aide de l'application en modeless
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void btnAide_Click(object sender, RoutedEventArgs e)
+		{
+			FenetreAide fenetreAide = new FenetreAide(presenteurContenu.Content.GetType().Name);
+			fenetreAide.Show();
+		}
+
+		/// <summary>
+		/// Ouvre la fenêtre des infos sur l'application en modal
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void btnAPropos_Click(object sender, RoutedEventArgs e)
+		{
+			(new FenetreAPropos()).ShowDialog();
+			//ServiceFactory.Instance.GetService<IApplicationService>().ChangerVue(new FenetreAPropos());
+		}
+
+		/// <summary>
+		/// Lorsque l'application de ferme, il faut fermer le Thread de notif.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Window_Closing(object sender, CancelEventArgs e)
+		{
+			ThreadVerifChangement.Abort();
+		}
+
+
 
 	}
 }
