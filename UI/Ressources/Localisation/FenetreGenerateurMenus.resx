@@ -153,6 +153,12 @@
   <data name="Personnes" xml:space="preserve">
     <value>Personnes :</value>
   </data>
+  <data name="RegenererPlat" xml:space="preserve">
+    <value>Regénérer le plat</value>
+  </data>
+  <data name="SauvegarderMenu" xml:space="preserve">
+    <value>Sauvegarder le menu</value>
+  </data>
   <data name="Semaine" xml:space="preserve">
     <value>Une semaine</value>
   </data>

@@ -124,6 +124,15 @@ namespace Nutritia.UI.Ressources.Localisation {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Fenetre Banissement.
+        /// </summary>
+        public static string FenetreBanissement {
+            get {
+                return ResourceManager.GetString("FenetreBanissement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Génération de menu.
         /// </summary>
         public static string GenerationMenu {
@@ -178,7 +187,7 @@ namespace Nutritia.UI.Ressources.Localisation {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Menu connecté.
+        ///   Recherche une chaîne localisée semblable à Menu membre.
         /// </summary>
         public static string MenuConnecte {
             get {

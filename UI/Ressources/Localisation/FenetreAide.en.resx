@@ -138,6 +138,9 @@
   <data name="EnvoyerUnDon" xml:space="preserve">
     <value>Send a donation</value>
   </data>
+  <data name="FenetreBanissement" xml:space="preserve">
+    <value>Banishment window</value>
+  </data>
   <data name="GenerationMenu" xml:space="preserve">
     <value>Menu generation</value>
   </data>
@@ -157,7 +160,7 @@
     <value>Administration</value>
   </data>
   <data name="MenuConnecte" xml:space="preserve">
-    <value>Connected menu</value>
+    <value>Member menu</value>
   </data>
   <data name="MenuPrincipal" xml:space="preserve">
     <value>Main menu</value>
