@@ -1277,6 +1277,11 @@ namespace Nutritia.UI.Views
             }
         }
 
+        /// <summary>
+        /// Événement lancé lors d'un changement de langues.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CultureManager_UICultureChanged(object sender, EventArgs e)
         {
             App.Current.MainWindow.Title = Nutritia.UI.Ressources.Localisation.FenetreGenerateurMenus.Titre;
