@@ -22,31 +22,37 @@ namespace Nutritia.UI.Views
     /// </summary>
     public partial class FenetreCalculatriceNutritionelle : UserControl
     {
-		// Liste de plat et d'aliment qui compose le plateau
-		private List<Plat> PlateauPlat { get; set; }
-		private List<Aliment> PlateauAliment { get; set; }
+        #region Propriété
 
-		// Ce dictionnaire sert de total de tous les aliments d'un plat ou d'un groupe de plat
-		private Dictionary<string, double> ValeurNutritive { get; set; }
+        // Liste de plat et d'aliment qui compose le plateau
+        private List<Plat> PlateauPlat { get; set; }
+        private List<Aliment> PlateauAliment { get; set; }
 
-		// Liste de tous les plats et aliments de la BD
-		private List<Plat> LstPlat { get; set; }
-		private List<Aliment> LstAliment { get; set; }
-		
-		// Liste de tous les plats et aliments retournés par la recherche
+        // Ce dictionnaire sert de total de tous les aliments d'un plat ou d'un groupe de plat
+        private Dictionary<string, double> ValeurNutritive { get; set; }
+
+        // Liste de tous les plats et aliments de la BD
+        private List<Plat> LstPlat { get; set; }
+        private List<Aliment> LstAliment { get; set; }
+
+        // Liste de tous les plats et aliments retournés par la recherche
         private List<Plat> BoiteRechPlat { get; set; }
         private List<Aliment> BoiteRechAliment { get; set; }
 
-		// Permet de detecter quel aliments et plats sont déja présents pour incrémenter le compteur
-		private List<int?> lstIdPresent { get; set; }
+        // Permet de detecter quel aliments et plats sont déja présents pour incrémenter le compteur
+        private List<int?> lstIdPresent { get; set; }
 
-		// Sous-division de l'écran qui sont raffraichis fréquement
-		private SousEcran Plateau { get; set; }
-		public SousEcran BoiteResultat { get; set; }
-		private SousEcran2 TabValeurNutritionelle { get; set; }
+        // Sous-division de l'écran qui sont raffraichis fréquement
+        private SousEcran Plateau { get; set; }
+        public SousEcran BoiteResultat { get; set; }
+        private SousEcran2 TabValeurNutritionelle { get; set; }
 
-		// Liste de plat qui affichent les aliments qui les composes
-		public List<int> LstIdPlatExplose { get; set; }
+        // Liste de plat qui affichent les aliments qui les composes
+        public List<int> LstIdPlatExplose { get; set; }
+
+        #endregion
+
+        #region Constructeur et config
 
         public FenetreCalculatriceNutritionelle()
         {
@@ -59,30 +65,30 @@ namespace Nutritia.UI.Views
             ConfigurerCalculatrice();
         }
 
-		/// <summary>
-		/// Constructeur qui accepte un plat pour l'envoyer dans le plateau à la construction
-		/// </summary>
-		/// <param name="platEnvoye"></param>
-		public FenetreCalculatriceNutritionelle(Plat platEnvoye)
-		{
+        /// <summary>
+        /// Constructeur qui accepte un plat pour l'envoyer dans le plateau à la construction
+        /// </summary>
+        /// <param name="platEnvoye"></param>
+        public FenetreCalculatriceNutritionelle(Plat platEnvoye)
+        {
             App.Current.MainWindow.Title = FenetreCalculatriceNutritionnelle.Titre;
 
             CultureManager.UICultureChanged += CultureManager_UICultureChanged;
             InitializeComponent();
             Initialiser();
 
-			// On déssine le plateau s'il a un plat passé en paramètre (appellé ailleur que dans les menus principaux)
-			PlateauPlat.Add(platEnvoye);
+            // On déssine le plateau s'il a un plat passé en paramètre (appellé ailleur que dans les menus principaux)
+            PlateauPlat.Add(platEnvoye);
 
             ConfigurerCalculatrice();
         }
 
-		/// <summary>
-		/// Constructeur qui accepte une liste plat pour les envoyer dans le plateau à la construction
-		/// </summary>
-		/// <param name="lstPlatEnvoye"></param>
-		public FenetreCalculatriceNutritionelle(List<Plat> lstPlatEnvoye)
-		{
+        /// <summary>
+        /// Constructeur qui accepte une liste plat pour les envoyer dans le plateau à la construction
+        /// </summary>
+        /// <param name="lstPlatEnvoye"></param>
+        public FenetreCalculatriceNutritionelle(List<Plat> lstPlatEnvoye)
+        {
             App.Current.MainWindow.Title = FenetreCalculatriceNutritionnelle.Titre;
             CultureManager.UICultureChanged += CultureManager_UICultureChanged;
             InitializeComponent();
@@ -94,14 +100,14 @@ namespace Nutritia.UI.Views
             ConfigurerCalculatrice();
         }
 
-		// Permet d'initialiser toutes les variables qu'utilisent la calculatrice
-		private void Initialiser()
-		{
-			Plateau = new SousEcran();
-			presenteurContenu2.Content = Plateau;
-			TabValeurNutritionelle = new SousEcran2();
-			presenteurContenu3.Content = TabValeurNutritionelle;
-			presenteurContenu4.Content = BoiteResultat;
+        // Permet d'initialiser toutes les variables qu'utilisent la calculatrice
+        private void Initialiser()
+        {
+            Plateau = new SousEcran();
+            presenteurContenu2.Content = Plateau;
+            TabValeurNutritionelle = new SousEcran2();
+            presenteurContenu3.Content = TabValeurNutritionelle;
+            presenteurContenu4.Content = BoiteResultat;
 
 
             LstPlat = new List<Plat>();
@@ -113,16 +119,16 @@ namespace Nutritia.UI.Views
             PlateauAliment = new List<Aliment>();
             ValeurNutritive = new Dictionary<string, double>();
 
-			LstIdPlatExplose = new List<int>();
-		}
+            LstIdPlatExplose = new List<int>();
+        }
 
-		/// <summary>
-		/// Construit les listes et les sections affichables de la fenêtre
-		/// </summary>
-		private void ConfigurerCalculatrice()
-		{ 
-			// On génere l'écran des valeurs nutritives
-			CalculerValeurNutritionelle();
+        /// <summary>
+        /// Construit les listes et les sections affichables de la fenêtre
+        /// </summary>
+        private void ConfigurerCalculatrice()
+        {
+            // On génere l'écran des valeurs nutritives
+            CalculerValeurNutritionelle();
 
             Mouse.OverrideCursor = Cursors.Wait;
 
@@ -132,8 +138,8 @@ namespace Nutritia.UI.Views
             BoiteRechPlat.AddRange(LstPlat);
             BoiteRechAliment.AddRange(ServiceFactory.Instance.GetService<IAlimentService>().RetrieveAll());
 
-			// On tri la liste des plats pour l'afficher dans l'ordre dans l'accordéon
-			LstPlat = LstPlat.OrderBy(plat => plat.Nom).ToList();
+            // On tri la liste des plats pour l'afficher dans l'ordre dans l'accordéon
+            LstPlat = LstPlat.OrderBy(plat => plat.Nom).ToList();
 
             // Puis pour la barre de recherche
             BoiteRechPlat = BoiteRechPlat.OrderBy(plat => plat.Nom).ToList();
@@ -162,17 +168,17 @@ namespace Nutritia.UI.Views
             FormerItemAccordeon(FenetreCalculatriceNutritionnelle.Dejeuner);
         }
 
-		/// <summary>
-		/// Génere un item d'accordéon pour la section passée en paramètre
-		/// </summary>
-		/// <param name="nomItem"></param>
-		public void FormerItemAccordeon(string nomItem)
-		{
-			AccordionItem itemAccordeon = new AccordionItem();
-			itemAccordeon.Header = nomItem;
-			StackPanel stackLigne = new StackPanel();
-			stackLigne.Background = Brushes.White;
-			stackLigne.Width = 284;
+        /// <summary>
+        /// Génere un item d'accordéon pour la section passée en paramètre
+        /// </summary>
+        /// <param name="nomItem"></param>
+        public void FormerItemAccordeon(string nomItem)
+        {
+            AccordionItem itemAccordeon = new AccordionItem();
+            itemAccordeon.Header = nomItem;
+            StackPanel stackLigne = new StackPanel();
+            stackLigne.Background = Brushes.White;
+            stackLigne.Width = 284;
 
             foreach (var plat in LstPlat)
             {
@@ -186,29 +192,30 @@ namespace Nutritia.UI.Views
             accPlat.Items.Add(itemAccordeon);
         }
 
+        #endregion
 
-		/// <summary>
-		/// Méthode qui défini le filtre de recherche d'un Aliment pour la SearchBox
-		/// </summary>
-		/// <param name="obj"></param>
-		/// <returns></returns>
-		public void FiltrerChampRecherche(string champ)
-		{
-			BoiteRechAliment = LstAliment.FindAll(A => EnleverAccent(A.Nom).ToLower().Contains(EnleverAccent(champ).ToLower())).OrderBy(aliment => aliment.Nom).ToList();
-			BoiteRechPlat = LstPlat.FindAll(P => EnleverAccent(P.Nom).ToLower().Contains(EnleverAccent(champ).ToLower())).OrderBy(plat => plat.Nom).ToList();
-		}
+        /// <summary>
+        /// Méthode qui défini le filtre de recherche d'un Aliment pour la SearchBox
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public void FiltrerChampRecherche(string champ)
+        {
+            BoiteRechAliment = LstAliment.FindAll(A => EnleverAccent(A.Nom).ToLower().Contains(EnleverAccent(champ).ToLower())).OrderBy(aliment => aliment.Nom).ToList();
+            BoiteRechPlat = LstPlat.FindAll(P => EnleverAccent(P.Nom).ToLower().Contains(EnleverAccent(champ).ToLower())).OrderBy(plat => plat.Nom).ToList();
+        }
 
-		/// <summary>
-		/// Remplace les accens par les lettres d'origines
-		/// </summary>
-		/// <param name="text"></param>
-		/// <returns>chaine sans accent</returns>
-		public string EnleverAccent(string text)
-		{
-			byte[] tmpBytes;
-			tmpBytes = System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(text);
-			return System.Text.Encoding.UTF8.GetString(tmpBytes);			
-		}
+        /// <summary>
+        /// Remplace les accens par les lettres d'origines
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns>chaine sans accent</returns>
+        public string EnleverAccent(string text)
+        {
+            byte[] tmpBytes;
+            tmpBytes = System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(text);
+            return System.Text.Encoding.UTF8.GetString(tmpBytes);
+        }
 
         /// <summary>
         /// Méthode qui génere deux StackPanel pour les plat et aliment dans le plateau
@@ -228,17 +235,17 @@ namespace Nutritia.UI.Views
             {
                 Button btnPlat = FormerListeLignePlatAliment(false, plat, lstIdPresent);
 
-				if (btnPlat != null)
-				{
-					Plateau.stackEcran.Children.Add(btnPlat);
-					if (LstIdPlatExplose.Any(idP => idP == plat.IdPlat))
-					{
-						foreach (var aliment in plat.ListeIngredients)
-						{
-							Button btnAliment = FormerListeLignePlatAliment(null, aliment, null);
-							Plateau.stackEcran.Children.Add(btnAliment);
-						}
-					}
+                if (btnPlat != null)
+                {
+                    Plateau.stackEcran.Children.Add(btnPlat);
+                    if (LstIdPlatExplose.Any(idP => idP == plat.IdPlat))
+                    {
+                        foreach (var aliment in plat.ListeIngredients)
+                        {
+                            Button btnAliment = FormerListeLignePlatAliment(null, aliment, null);
+                            Plateau.stackEcran.Children.Add(btnAliment);
+                        }
+                    }
 
                 }
             }
@@ -285,62 +292,6 @@ namespace Nutritia.UI.Views
                     BoiteResultat.stackEcran.Children.Add(btnAliment);
             }
         }
-
-
-        /// <summary>
-        /// Ajoute la ligne de Plat si l'utilisateur clique sur le bouton
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void AjoutItem_Click(object sender, RoutedEventArgs e)
-        {
-            Button btn = (Button)sender;
-            int idObjet = Convert.ToInt32(btn.Uid);
-
-            if (idObjet > 0)
-            {
-                foreach (var plat in LstPlat)
-                {
-                    if (plat.IdPlat == idObjet)
-                    {
-                        int iteration = 1;
-                        if (Keyboard.Modifiers == ModifierKeys.Control)
-                            iteration = 10;
-
-                        int posPlatActuel = PlateauPlat.FindIndex(P => P == plat);
-
-                        for (int i = 0; i < iteration; i++)
-                        {
-                            PlateauPlat.Insert(posPlatActuel + 1, plat);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                foreach (var aliment in BoiteRechAliment)
-                {
-                    if (aliment.IdAliment == idObjet * -1)
-                    {
-                        int iteration = 1;
-                        if (Keyboard.Modifiers == ModifierKeys.Control)
-                            iteration = 10;
-
-                        int posAlimentActuel = PlateauAliment.FindIndex(A => A == aliment);
-
-                        for (int i = 0; i < iteration; i++)
-                        {
-                            PlateauAliment.Insert(posAlimentActuel + 1, aliment);
-                        }
-                    }
-                }
-            }
-
-
-            DessinerPlateau();
-        }
-
-
 
         /// <summary>
         /// Génere une ligne de plat ou aliment 
@@ -478,85 +429,7 @@ namespace Nutritia.UI.Views
             return btnControl;
         }
 
-		/// <summary>
-		/// Evenement qui ajoute ou enlève un plat à dérouler dans la liste de plats explosés
-		/// suivant s'il y est déja présent
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void BtnControlDerouler_Click(object sender, MouseButtonEventArgs e)
-		{
-			Button btnPlat = (Button)sender;
-
-			int idPlatCourrant = Convert.ToInt32(btnPlat.Uid);
-			if (Keyboard.Modifiers == ModifierKeys.Shift)
-			{
-				if (LstIdPlatExplose.Count != 0)
-					LstIdPlatExplose.Clear();
-				else
-					foreach (var plat in PlateauPlat)
-						LstIdPlatExplose.Add((int)plat.IdPlat);
-			}
-
-			else
-			{
-				if (LstIdPlatExplose.Any(idP => idP == idPlatCourrant))
-					LstIdPlatExplose.Remove(idPlatCourrant);
-				else
-					LstIdPlatExplose.Add(idPlatCourrant);
-			}
-
-            DessinerPlateau();
-        }
-
-
-        /// <summary>
-        /// Supprime la ligne de Plat/Aliment si l'utilisateur clique sur le bouton
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnControlSupprimer_Click(object sender, RoutedEventArgs e)
-        {
-            Button btn = (Button)sender;
-            Plat monPlat = new Plat();
-            Aliment monAliment = new Aliment();
-
-            bool estPlat = Convert.ToInt32(btn.Uid) > 0;
-
-            // On compte le nbr de plat ou aliment présent dans le plateau pour controller sa suppréssion
-            int nbrItemActuel = (estPlat ?
-                                PlateauPlat.Count(P => P.IdPlat == Convert.ToInt32(btn.Uid)) :
-                                PlateauAliment.Count(A => A.IdAliment == Convert.ToInt32(btn.Uid) * -1));
-            int iteration = 1;
-            if (Keyboard.Modifiers == ModifierKeys.Control)
-                iteration = (nbrItemActuel < 10 ?
-                            nbrItemActuel :
-                            10);
-
-            else if (Keyboard.Modifiers == ModifierKeys.Shift)
-                iteration = nbrItemActuel;
-
-
-			// On supprime 1 / 10 / ou tous le items qui correspondent à l'objet cliqué
-			if (estPlat)
-			{
-				// Si on vide ce plat, il faut enlever son id de la liste des plats à dérouler
-				if (nbrItemActuel == iteration)
-					LstIdPlatExplose.Remove(Convert.ToInt32(btn.Uid));
-				for (int i = 0; i < iteration; i++)
-					PlateauPlat.Remove(PlateauPlat.Last(P => P.IdPlat == Convert.ToInt32(btn.Uid)));
-
-            }
-
-
-            else
-                for (int i = 0; i < iteration; i++)
-                    PlateauAliment.Remove(PlateauAliment.Last(P => P.IdAliment == Convert.ToInt32(btn.Uid) * -1));
-
-            DessinerPlateau();
-        }
-
-
+        #region ValeurNutri
 
         /// <summary>
         /// Méthode permettant de générer les valeurs nutritionnelles d'un aliment dans un tooltip. (Prise de Guillaume)
@@ -698,16 +571,142 @@ namespace Nutritia.UI.Views
                 dValeurNutritive["Sodium"] += aliment.Sodium * (quantite / mesure);
             }
 
-		/// <summary>
-		/// Evenement qui appelle des méthodes pour mettre à jour la boite de 
-		/// recherche en fonction du texte écrit par l'utilisateur
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void txtRecherche_PreviewKeyUp(object sender, KeyEventArgs e)
-		{
-			TextBox textBox = (TextBox)sender;
-			FiltrerChampRecherche(textBox.Text.ToString());
+            return dValeurNutritive;
+        }
+
+        #endregion
+
+        #region Evenements
+
+        /// <summary>
+        /// Ajoute la ligne de Plat si l'utilisateur clique sur le bouton
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AjoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            int idObjet = Convert.ToInt32(btn.Uid);
+
+            if (idObjet > 0)
+            {
+                foreach (var plat in LstPlat)
+                {
+                    if (plat.IdPlat == idObjet)
+                    {
+                        int iteration = 1;
+                        if (Keyboard.Modifiers == ModifierKeys.Control)
+                            iteration = 10;
+
+                        int posPlatActuel = PlateauPlat.FindIndex(P => P == plat);
+
+                        for (int i = 0; i < iteration; i++)
+                        {
+                            PlateauPlat.Insert(posPlatActuel + 1, plat);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var aliment in BoiteRechAliment)
+                {
+                    if (aliment.IdAliment == idObjet * -1)
+                    {
+                        int iteration = 1;
+                        if (Keyboard.Modifiers == ModifierKeys.Control)
+                            iteration = 10;
+
+                        int posAlimentActuel = PlateauAliment.FindIndex(A => A == aliment);
+
+                        for (int i = 0; i < iteration; i++)
+                        {
+                            PlateauAliment.Insert(posAlimentActuel + 1, aliment);
+                        }
+                    }
+                }
+            }
+
+
+            DessinerPlateau();
+        }
+
+        /// <summary>
+        /// Evenement qui ajoute ou enlève un plat à dérouler dans la liste de plats explosés
+        /// suivant s'il y est déja présent
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnControlDerouler_Click(object sender, MouseButtonEventArgs e)
+        {
+            Button btnPlat = (Button)sender;
+
+            int idPlatCourrant = Convert.ToInt32(btnPlat.Uid);
+            if (Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                if (LstIdPlatExplose.Count != 0)
+                    LstIdPlatExplose.Clear();
+                else
+                    foreach (var plat in PlateauPlat)
+                        LstIdPlatExplose.Add((int)plat.IdPlat);
+            }
+
+            else
+            {
+                if (LstIdPlatExplose.Any(idP => idP == idPlatCourrant))
+                    LstIdPlatExplose.Remove(idPlatCourrant);
+                else
+                    LstIdPlatExplose.Add(idPlatCourrant);
+            }
+
+            DessinerPlateau();
+        }
+
+        /// <summary>
+        /// Supprime la ligne de Plat/Aliment si l'utilisateur clique sur le bouton
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnControlSupprimer_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            Plat monPlat = new Plat();
+            Aliment monAliment = new Aliment();
+
+            bool estPlat = Convert.ToInt32(btn.Uid) > 0;
+
+            // On compte le nbr de plat ou aliment présent dans le plateau pour controller sa suppréssion
+            int nbrItemActuel = (estPlat ?
+                                PlateauPlat.Count(P => P.IdPlat == Convert.ToInt32(btn.Uid)) :
+                                PlateauAliment.Count(A => A.IdAliment == Convert.ToInt32(btn.Uid) * -1));
+            int iteration = 1;
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+                iteration = (nbrItemActuel < 10 ?
+                            nbrItemActuel :
+                            10);
+
+            else if (Keyboard.Modifiers == ModifierKeys.Shift)
+                iteration = nbrItemActuel;
+
+
+            // On supprime 1 / 10 / ou tous le items qui correspondent à l'objet cliqué
+            if (estPlat)
+            {
+                // Si on vide ce plat, il faut enlever son id de la liste des plats à dérouler
+                if (nbrItemActuel == iteration)
+                    LstIdPlatExplose.Remove(Convert.ToInt32(btn.Uid));
+                for (int i = 0; i < iteration; i++)
+                    PlateauPlat.Remove(PlateauPlat.Last(P => P.IdPlat == Convert.ToInt32(btn.Uid)));
+
+            }
+
+
+            else
+                for (int i = 0; i < iteration; i++)
+                    PlateauAliment.Remove(PlateauAliment.Last(P => P.IdAliment == Convert.ToInt32(btn.Uid) * -1));
+
+            DessinerPlateau();
+        }
 
         /// <summary>
         /// Evenement qui Appelle des méthode pour mettre à jour la boite de 
@@ -724,53 +723,61 @@ namespace Nutritia.UI.Views
 
         }
 
-		/// <summary>
-		/// Détecte un raccourcis du clavier
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void UserControl_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.Key == Key.Delete)
-				if (Keyboard.Modifiers == ModifierKeys.Control)
-				{
-					PlateauAliment.Clear();
-					PlateauPlat.Clear();
-					LstIdPlatExplose.Clear();
-					DessinerPlateau();
-				}
-		}
+        /// <summary>
+        /// Détecte un raccourcis du clavier
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UserControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+                if (Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    PlateauAliment.Clear();
+                    PlateauPlat.Clear();
+                    LstIdPlatExplose.Clear();
+                    DessinerPlateau();
+                }
+        }
 
-		/// <summary>
-		/// Lors du clique sur la poubelle, on vide tous ce que le plateau contient
-		/// et on le redessine pour l'actualiser.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btnVider_Click(object sender, RoutedEventArgs e)
-		{
-			PlateauAliment.Clear();
-			PlateauPlat.Clear();
-			LstIdPlatExplose.Clear();
-			DessinerPlateau();
-
+        /// <summary>
+        /// Lors du clique sur la poubelle, on vide tous ce que le plateau contient
+        /// et on le redessine pour l'actualiser.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnVider_Click(object sender, RoutedEventArgs e)
         {
             PlateauAliment.Clear();
             PlateauPlat.Clear();
-            LstIdPlatADerouler.Clear();
+            LstIdPlatExplose.Clear();
             DessinerPlateau();
+        }
 
-		/// <summary>
-		/// Pour changer le titre de la fenêtre lors d'un changement de langue.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
+        /// <summary>
+        /// Code de Guillaume (légerement modifié pour qu'il soit compatible avec un apel de tous les SV):
+        /// Événement lancé lorsque la roulette de la souris est utilisée dans le "scrollviewer" contenant le menu.
+        /// Explicitement, cet événement permet de gérer le "scroll" avec la roulette correctement sur toute la surface du "scrollviewer".
+        /// Si on ne le gère pas, il est seulement possible de "scroller" lorsque le pointeur de la souris est situé sur la "scrollbar".
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScrollFocus(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = (ScrollViewer)sender;
+            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+        }
+
+        /// <summary>
+        /// Pour changer le titre de la fenêtre lors d'un changement de langue.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CultureManager_UICultureChanged(object sender, EventArgs e)
         {
             App.Current.MainWindow.Title = FenetreCalculatriceNutritionnelle.Titre;
         }
-
+        #endregion
     }
 
 
