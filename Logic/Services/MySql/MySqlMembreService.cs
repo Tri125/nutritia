@@ -130,6 +130,7 @@ namespace Nutritia
 
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
 
@@ -210,6 +211,7 @@ namespace Nutritia
         {
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
                     string requete = string.Format("INSERT INTO Membres (nom ,prenom, taille, masse, dateNaissance, nomUtilisateur, motPasse, idLangue) VALUES ('{0}', '{1}', {2}, {3}, '{4}', '{5}', '{6}', (SELECT idLangue FROM Langues WHERE IETF = '{7}'))", membre.Nom, membre.Prenom, membre.Taille, membre.Masse, membre.DateNaissance.ToString("yyyy-MM-dd"), membre.NomUtilisateur, membre.MotPasse, membre.LangueMembre.IETF);
@@ -254,6 +256,7 @@ namespace Nutritia
         {
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
                     string requete = string.Format("UPDATE Membres SET nom = '{0}' ,prenom = '{1}', taille = {2}, masse = {3}, dateNaissance = '{4}', nomUtilisateur = '{5}', motPasse = '{6}', estAdmin = {7}, estBanni = {8}, idLangue = (SELECT idLangue FROM Langues WHERE IETF = '{9}') WHERE idMembre = {10}", membre.Nom, membre.Prenom, membre.Taille, membre.Masse, membre.DateNaissance.ToString("yyyy-MM-dd"), membre.NomUtilisateur, membre.MotPasse, membre.EstAdministrateur, membre.EstBanni, membre.LangueMembre.IETF, membre.IdMembre);
@@ -335,6 +338,7 @@ namespace Nutritia
 
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
 
@@ -402,7 +406,8 @@ namespace Nutritia
         }
 
         /// <summary>
-        /// Méthode permettant d'obtenir la date de la dernière modification d'un membre dans la base de données.
+        /// Méthode permettant d'obtenir la date et l'heure de la dernière modification d'un membre dans la base de données.
+        /// Utilisé pour voir si un temps de dernière modification devient plus récent pour remettre à jour des données pouvant être affiché.
         /// </summary>
         /// <returns>Un objet DateTime.</returns>
         public DateTime LastUpdatedTime()
@@ -410,6 +415,7 @@ namespace Nutritia
             DateTime time;
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
 
@@ -429,22 +435,19 @@ namespace Nutritia
             return time;
         }
 
-        #endregion
 
-        //------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //                                                      Méthode non-relative aux services membres.
-        //------------------------------------------------------------------------------------------------------------------------------------------------------------
         
         /// <summary>
-        /// Méthode permettant d'obtenir un objet Langue en fonction d'un id.
+        /// Méthode permettant d'obtenir l'objet Langue à partir du idLangue associé au Membre.
         /// </summary>
-        /// <param name="id">Id de la langue désirée.</param>
+        /// <param name="id">idLangue que nous cherchons.</param>
         /// <returns>Un objet Langue.</returns>
         private Langue LangueFromId(int id)
         {
             Langue langue;
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
 
@@ -452,6 +455,7 @@ namespace Nutritia
                     using (DataSet dataSetLangue = connexion.Query(requete))
                     using (DataTable tableLangue = dataSetLangue.Tables[0])
                     {
+                        //Utilise la méthode LangueFromIETF de la classe Langue pour obtenir l'objet Langue à partir d'un string du tag IETF ("fr-CA").
                         langue = Langue.LangueFromIETF(tableLangue.Rows[0]["IETF"].ToString());
                     }
                 }
@@ -463,7 +467,7 @@ namespace Nutritia
             return langue;
         }
 
-        
+        #endregion
 
     }
 }
