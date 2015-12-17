@@ -135,19 +135,7 @@ namespace Nutritia.UI.Views
             FenetreVote popupVote = new FenetreVote(platSelectionne);
             popupVote.ShowDialog();
 
-            switch(gbContenu.Header.ToString())
-            {
-                case "Tous les plats" :
-                    btnSelectionComplete_Click(null, null);
-                break;
-                case "Nouveautés" :
-                    btnNouveautes_Click(null, null);
-                break;
-                case "Les plus populaires" :
-                    btnPlusPopulaires_Click(null, null);
-                break;
-            }
-
+            Rafraichir();
         }
 
         /// <summary>
@@ -178,8 +166,11 @@ namespace Nutritia.UI.Views
             dgPlats.ItemsSource = ListePlats;
         }
 
-		public void Rafraichir()
-		{
+        /// <summary>
+        /// Méthode permettant de rafraîchir les plats affichés en fonction du filtre sélectionné.
+        /// </summary>
+        public void Rafraichir()
+        {
             switch (gbContenu.Header.ToString())
             {
                 case "Tous les plats":
@@ -192,6 +183,6 @@ namespace Nutritia.UI.Views
                     btnPlusPopulaires_Click(null, null);
                     break;
             }
-		}
+        }
     }
 }

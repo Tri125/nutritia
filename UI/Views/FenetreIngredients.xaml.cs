@@ -173,6 +173,11 @@ namespace Nutritia.UI.Views
             windowCalculatrice.Show();
         }
 
+        /// <summary>
+        /// Événement lancé lors d'un changement de langues.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CultureManager_UICultureChanged(object sender, EventArgs e)
         {
             AfficherIngredients(new List<Aliment>(PlatCourant.ListeIngredients), NbrPersonnes);
