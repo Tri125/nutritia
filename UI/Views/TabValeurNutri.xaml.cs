@@ -18,9 +18,9 @@ namespace Nutritia.UI.Views
 	/// <summary>
 	/// Interaction logic for SousEcran2.xaml
 	/// </summary>
-	public partial class SousEcran2 : UserControl
+	public partial class TabValeurNutri : UserControl
 	{
-		public SousEcran2()
+		public TabValeurNutri()
 		{
 			InitializeComponent();
 		}

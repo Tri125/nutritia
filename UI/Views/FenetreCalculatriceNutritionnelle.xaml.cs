@@ -45,7 +45,7 @@ namespace Nutritia.UI.Views
         // Sous-division de l'écran qui sont raffraichis fréquement
         private SousEcran Plateau { get; set; }
         public SousEcran BoiteResultat { get; set; }
-        private SousEcran2 TabValeurNutritionelle { get; set; }
+        private TabValeurNutri TabValeurNutritionelle { get; set; }
 
         // Liste de plat qui affichent les aliments qui les composes
         public List<int> LstIdPlatExplose { get; set; }
@@ -105,7 +105,7 @@ namespace Nutritia.UI.Views
         {
             Plateau = new SousEcran();
             presenteurContenu2.Content = Plateau;
-            TabValeurNutritionelle = new SousEcran2();
+            TabValeurNutritionelle = new TabValeurNutri();
             presenteurContenu3.Content = TabValeurNutritionelle;
             presenteurContenu4.Content = BoiteResultat;
 
@@ -519,7 +519,7 @@ namespace Nutritia.UI.Views
         /// </summary>
         void DessinerTabValeurNutritionelle()
         {
-            TabValeurNutritionelle = new SousEcran2();
+            TabValeurNutritionelle = new TabValeurNutri();
             presenteurContenu3.Content = TabValeurNutritionelle;
 
             TabValeurNutritionelle.vEnegie.Inlines.Add(Math.Round(ValeurNutritive["Calorie"], 2).ToString("N"));
