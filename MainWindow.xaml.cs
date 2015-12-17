@@ -418,7 +418,7 @@ namespace Nutritia
 					 MessageBoxImage.Information) == MessageBoxResult.Yes)
 			{
 				Process p = new Process();
-				p.StartInfo.FileName = latestVersionLogiciel.DownloadLink + "/download/v" + latestVersionLogiciel.Version + "/Nutritia.zip";
+				p.StartInfo.FileName = latestVersionLogiciel.DownloadLink;
 				p.Start();
 			}
 
