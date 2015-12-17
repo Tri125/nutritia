@@ -38,6 +38,8 @@ namespace Nutritia
             menuService = new MySqlMenuService();
         }
 
+        #region ServicesMembres
+
         /// <summary>
         /// Méthode permettant d'obtenir l'ensemble des membres sauvegardés dans la base de données.
         /// </summary>
@@ -128,6 +130,7 @@ namespace Nutritia
 
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
 
@@ -208,6 +211,7 @@ namespace Nutritia
         {
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
                     string requete = string.Format("INSERT INTO Membres (nom ,prenom, taille, masse, dateNaissance, nomUtilisateur, motPasse, idLangue) VALUES ('{0}', '{1}', {2}, {3}, '{4}', '{5}', '{6}', (SELECT idLangue FROM Langues WHERE IETF = '{7}'))", membre.Nom, membre.Prenom, membre.Taille, membre.Masse, membre.DateNaissance.ToString("yyyy-MM-dd"), membre.NomUtilisateur, membre.MotPasse, membre.LangueMembre.IETF);
@@ -252,6 +256,7 @@ namespace Nutritia
         {
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
                     string requete = string.Format("UPDATE Membres SET nom = '{0}' ,prenom = '{1}', taille = {2}, masse = {3}, dateNaissance = '{4}', nomUtilisateur = '{5}', motPasse = '{6}', estAdmin = {7}, estBanni = {8}, idLangue = (SELECT idLangue FROM Langues WHERE IETF = '{9}'), derniereMaj = CURRENT_TIMESTAMP WHERE idMembre = {10}", membre.Nom, membre.Prenom, membre.Taille, membre.Masse, membre.DateNaissance.ToString("yyyy-MM-dd"), membre.NomUtilisateur, membre.MotPasse, membre.EstAdministrateur, membre.EstBanni, membre.LangueMembre.IETF, membre.IdMembre);
@@ -323,12 +328,17 @@ namespace Nutritia
 
         }
 
+        /// <summary>
+        /// Méthode permettant d'obtenir la liste de tous les membres avec les droits d'administration.
+        /// </summary>
+        /// <returns>Une liste d'objet Membre</returns>
         public IList<Membre> RetrieveAdmins()
         {
             IList<Membre> resultat = new List<Membre>();
 
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
 
@@ -395,34 +405,17 @@ namespace Nutritia
             return resultat;
         }
 
-        private Langue LangueFromId(int id)
-        {
-            Langue langue;
-            try
-            {
-                using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
-                {
-
-                    string requete = string.Format("SELECT IETF FROM Langues WHERE idLangue = {0}", id);
-                    using (DataSet dataSetLangue = connexion.Query(requete))
-                    using (DataTable tableLangue = dataSetLangue.Tables[0])
-                    {
-                        langue = Langue.LangueFromIETF(tableLangue.Rows[0]["IETF"].ToString());
-                    }
-                }
-            }
-            catch (MySqlException)
-            {
-                throw;
-            }
-            return langue;
-        }
-
+        /// <summary>
+        /// Méthode permettant d'obtenir la date et l'heure de la dernière modification d'un membre dans la base de données.
+        /// Utilisé pour voir si un temps de dernière modification devient plus récent pour remettre à jour des données pouvant être affiché.
+        /// </summary>
+        /// <returns>Un objet DateTime.</returns>
         public DateTime LastUpdatedTime()
         {
             DateTime time;
             try
             {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
                 using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
                 {
 
@@ -441,6 +434,40 @@ namespace Nutritia
             }
             return time;
         }
+
+
+        
+        /// <summary>
+        /// Méthode permettant d'obtenir l'objet Langue à partir du idLangue associé au Membre.
+        /// </summary>
+        /// <param name="id">idLangue que nous cherchons.</param>
+        /// <returns>Un objet Langue.</returns>
+        private Langue LangueFromId(int id)
+        {
+            Langue langue;
+            try
+            {
+                //Si stringConnexion est null ou vide, constructeur vide, sinon on utilise le stringConnexion spécifié.
+                using (MySqlConnexion connexion = (String.IsNullOrWhiteSpace(stringConnexion)) ? new MySqlConnexion() : new MySqlConnexion(stringConnexion))
+                {
+
+                    string requete = string.Format("SELECT IETF FROM Langues WHERE idLangue = {0}", id);
+                    using (DataSet dataSetLangue = connexion.Query(requete))
+                    using (DataTable tableLangue = dataSetLangue.Tables[0])
+                    {
+                        //Utilise la méthode LangueFromIETF de la classe Langue pour obtenir l'objet Langue à partir d'un string du tag IETF ("fr-CA").
+                        langue = Langue.LangueFromIETF(tableLangue.Rows[0]["IETF"].ToString());
+                    }
+                }
+            }
+            catch (MySqlException)
+            {
+                throw;
+            }
+            return langue;
+        }
+
+        #endregion
 
     }
 }

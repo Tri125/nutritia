@@ -13,9 +13,13 @@ namespace Nutritia
     {
         private MySqlConnexion connexion;
 
-        public IList<Transaction> RetrieveAll()
+        /// <summary>
+        /// Méthode qui récupère tout les dons contenu dans la base de données
+        /// </summary>
+        /// <returns>IList de tout les dons</returns>
+        public IList<Don> RetrieveAll()
         {
-            IList<Transaction> resultat = new List<Transaction>();
+            IList<Don> resultat = new List<Don>();
 
             try
             {
@@ -37,7 +41,11 @@ namespace Nutritia
             return resultat;
         }
 
-        public void Insert(Transaction don)
+        /// <summary>
+        /// Méthode qui insère dans la base de données un Don
+        /// </summary>
+        /// <param name="don">Don à insérer</param>
+        public void Insert(Don don)
         {
             try
             {
@@ -51,20 +59,31 @@ namespace Nutritia
             }
         }
 
-        private Transaction ConstruireDon(DataRow don)
+        /// <summary>
+        /// Méthode qui construit un objet Don à partir d'un DataRow
+        /// </summary>
+        /// <param name="don">DataRow de réponse d'une requête MySql</param>
+        /// <returns></returns>
+        private Don ConstruireDon(DataRow don)
         {
             DateTime DateHeureTransaction = (DateTime)don["dateDon"];
             float Montant = (float)don["montant"];
             string NomAuteur = (string)don["Auteur"];
+            //À partir du nom, la méthode StringToValue de ModePaiement retournera l'instance recherché pour le type de carte.
             ModePaiement mode = ModePaiement.StringToValue((string)don["ModePaiement"]);
-            return new Transaction(NomAuteur, Montant, mode, DateHeureTransaction);
+            return new Don(NomAuteur, Montant, mode, DateHeureTransaction);
         }
 
-
-        public void Insert(Membre membre, Transaction transaction)
+        /// <summary>
+        /// Méthode permettant d'associer un don à un membre
+        /// </summary>
+        /// <param name="membre">Membre envoyant le don</param>
+        /// <param name="transaction">Don à insérer dans la base de données</param>
+        public void Insert(Membre membre, Don transaction)
         {
+            //Appel la méthode qui ne fait qu'insérer le Don dans la bd.
             Insert(transaction);
-
+            //Puis on exécute le code qui rajoutera les données nécessaire dans la table de correspondance DonsMembres pour associé le don au membre.
             try
             {
                 connexion = new MySqlConnexion();
@@ -77,6 +96,10 @@ namespace Nutritia
             }
         }
 
+        /// <summary>
+        /// Méthode appelant une VIEW pour obtenir le DateTime du don le plus récents dans la base de données
+        /// </summary>
+        /// <returns></returns>
         public DateTime LastTimeDon()
         {
             DateTime last = DateTime.MinValue;

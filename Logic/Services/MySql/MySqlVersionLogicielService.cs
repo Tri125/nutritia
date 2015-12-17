@@ -11,11 +11,20 @@ namespace Nutritia
     {
         private MySqlConnexion connexion;
 
+        /// <summary>
+        /// Méthode construisant un objet VersionLogiciel à partir d'un DataRow de réponse d'une requête MySql
+        /// </summary>
+        /// <param name="version">DataRow de réponse d'une requête MySql</param>
+        /// <returns></returns>
         private VersionLogiciel ConstruireVersionLogiciel(DataRow version)
         {
             return new VersionLogiciel(version["version"].ToString(), version["changelog"].ToString(), version["downloadLink"].ToString(), (DateTime)version["datePublication"]);
         }
 
+        /// <summary>
+        /// Méthode qui récupère la VersionLogiciel la plus récente de la base de données à partir d'une VIEW
+        /// </summary>
+        /// <returns></returns>
         public VersionLogiciel RetrieveLatest()
         {
             try

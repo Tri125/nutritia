@@ -7,26 +7,39 @@ using System.Threading.Tasks;
 namespace Nutritia.Logic.Model.Entities
 {
 
-    public class Transaction
+    /// <summary>
+    /// Classe représentant un Don
+    /// </summary>
+    public class Don
     {
-
+        //Global unique identifier comme no de transaction.
+        //Chance presque null d'avoir une collision.
         private Guid noTransaction;
-
-        public static uint ProchainNoTransaction { get; private set; }
 
         public Guid NoTransaction { get { return noTransaction; } }
 
+        //DateHeure où la transaction a eu lieu.
         public DateTime DateHeureTransaction { get; private set; }
+        //Nom du propriétaire de la carte de crédit qui a fait le Don.
         public string NomAuteur { get; private set; }
         public double Montant { get; private set; }
+
+        //Type de carte de crédit utilisé pour le Don.
         public ModePaiement ModePaiementTransaction { get; private set; }
 
-        public Transaction()
+        public Don()
         {
             noTransaction = Guid.NewGuid();
         }
 
-        public Transaction(string nom, double montant, ModePaiement modePaiement)
+        /// <summary>
+        /// Constructeur Don sans DateTime.
+        /// Lorsqu'on envoie un Don, le temps est mit sur le côté serveur.
+        /// </summary>
+        /// <param name="nom"></param>
+        /// <param name="montant"></param>
+        /// <param name="modePaiement">Type de carte de crédit</param>
+        public Don(string nom, double montant, ModePaiement modePaiement)
             : this()
         {
             NomAuteur = nom;
@@ -34,12 +47,25 @@ namespace Nutritia.Logic.Model.Entities
             ModePaiementTransaction = modePaiement;
         }
 
-        public Transaction(string nom, double montant, ModePaiement modePaiement, DateTime dateHeure)
+        /// <summary>
+        /// Constructeur Don avec DateTime
+        /// Lorsqu'on reçois un Don de la base de données, nous pouvons setter le DateTime avec le temps du Don
+        /// tel qu'enregistré dans la BD.
+        /// </summary>
+        /// <param name="nom"></param>
+        /// <param name="montant"></param>
+        /// <param name="modePaiement">Type de carte de crédit</param>
+        /// <param name="dateHeure"></param>
+        public Don(string nom, double montant, ModePaiement modePaiement, DateTime dateHeure)
             : this(nom, montant, modePaiement)
         {
             DateHeureTransaction = dateHeure;
         }
 
+        /// <summary>
+        /// Données de Don formatté dans le format utilisé pour encoder le codeQC.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

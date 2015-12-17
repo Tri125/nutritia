@@ -1,4 +1,4 @@
-#Nutritia
+﻿#Nutritia
 Bienvenue dans l'application Nutritia.
 Nutritia est conçu pour vous faciliter la vie lorsque vous ne savez pas quoi manger.
 Son système de génération de menus vous évitera de vous creuser la tête lorsque viendra le temps de préparer un repas.
