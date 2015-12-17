@@ -8,10 +8,10 @@ Bref, Nutritia, c'est ce qu'il vous faut.
 
 #MenuPrincipal
 À partir du menu principal, vous pourrez entreprendre différentes actions : 
-1 – Vous créer un compte Nutritia.
-2 – Vous connecter pour accéder aux fonctionnalités offertes par votre compte.
-3 – Accéder à la calculatrice nutritionnelle dans le but de visualiser les différentes valeurs nutritionnelles de certains aliments ou plats.
-4 – Accéder à la génération de menus de base. C’est-à-dire, qu’elle ne tient pas compte de vos conditions de santé et préférences et il est impossible de sauvegarder les menus générés et par le fait même de les ouvrir dans le futur.
+1.  Vous créer un compte Nutritia.
+2.  Vous connecter pour accéder aux fonctionnalités offertes par votre compte.
+3.  Accéder à la calculatrice nutritionnelle dans le but de visualiser les différentes valeurs nutritionnelles de certains aliments ou plats.
+4.  Accéder à la génération de menus de base. C’est-à-dire, qu’elle ne tient pas compte de vos conditions de santé et préférences et il est impossible de sauvegarder les menus générés et par le fait même de les ouvrir dans le futur.
 
 #MonProfil
 L’écran du profil est accessible lors de la création d’un compte Nutritia et lors de la modification d’un comte. Lors de la création d’un compte, les champs de saisies sont vides alors que lors d’une modification, les champs sont préalablement remplis.
@@ -52,21 +52,21 @@ Un icone à la droite d’un élément permet de distinguer si celui-ci est un p
 
 #AjoutPlat
 Vous êtes présentement dans l'ajout de plat. Grâce à cette fenêtre, vous pourrez entrer vos propres plats familliaux.
-
 Cet écran est divisé entre quatre sections. Chacune a son utilité.
-
-1.	Informations relatives au plat
+1. Informations relatives au plat
 Dans cette partie du sous-écran, on retrouve les informations courantes relatives au plat. Ceci inclus le nom de celui-ci, mais aussi le type auquel il appartient. Tout comme pour les contextes d’ajout et de modification d’aliments, il est aussi possible de fournir une image pour un plat.
-2.	Confirmer l’ajout
+2. Confirmer l’ajout
 Le bouton de confirmation permet de créer le plat courant. Il permet aussi de confirmer le contenu des différents champs de saisies, mais aussi des sélections requises comme le type de plat. Il est d’ailleurs impossible de créer un plat sans lui assigner au moins un aliment pour la composition.
-3.	Accordéon d’aliments
+3. Accordéon d’aliments
 L’accordéon contient la liste de tous les aliments présents dans la base de données utilisée actuellement par l’application. Cet accordéon regroupe aussi tous ces aliments par catégories alimentaires. Si l’utilisateur clique sur un aliment, ceci ajoute alors cet aliment dans la composition du plat, plus bas. Si cet aliment est déjà présent dans la composition du plat, un multiplicateur apparaît près du nom de l’aliment, signalant alors la quantité pour cet aliment.
-4.	Composition du plat
+4. Composition du plat
 La composition du plat est essentiellement une liste d’aliments composant le plat courant. Ceci permet à l’utilisateur de connaître le contenu d’un plat. Un clic sur un aliment dans la composition du plat a pour effet de réduire la valeur du multiplicateur (quantité) pour cet aliment. Si cet aliment n’a plus de multiplicateur, alors ce dernier est simplement retiré de la liste.
 
 #InfoSuspenssion
 Vous avez probablement été banni par un administrateur pour mauvaise utilisation de l'ajout de plat.
 Un membre banni n’a plus accès au contexte connecté de l’application, c’est-à-dire que l’accès au vote et à l’ajout de plat n’est plus accessible. De plus, l’utilisation du générateur de menu est restreint à la simple génération sans restriction ni préférence et sans la possibilité d’enregistrer un menu. Vous avez donc accès à l’application dans le contexte non-connécté.
+
+#FenetreBanissement
 
 #EnvoyerDon
 La section Faire un don permet à l’utilisateur d’envoyer un don par carte de crédit pour supporter le développement du logiciel Nutritia. Le bouton Confirmer reste désactivé tant et aussi longtemps que les champs de saisies restent vide. Le type de carte de crédit est détecté automatiquement et l’image correspondante au type de carte mise en évidence.
@@ -91,6 +91,13 @@ Essentiellement, l’information présentée dans cette partie est la même que 
 Pour l’instant, dans la version 1.0 du logiciel, le bouton n’a aucun effet. Dans une version ultérieure, il sera possible d’imprimer la liste conviviale.
 
 #MenuConnecte
+À partir de cet écran, il vous est possible de faire tout ce que fait un utilisateur non-connécté mais vous pourrez aussi accéder à plusieurs autres fonctionalité réservées à un membre:
+1.  Votre profil utilisateur afin de configurer votre compte Nutritia
+2.  Vous déconnecter
+3.  La Calculatrice nutritionnelle pour calculer un plat.
+4.  La génération de Menu & liste d’épicerie
+5.  L'ajout d'un plat
+6.  Le vote d'un plat vous permettant d'accéder aux plats favoris ou récemment ajouter, vous pourrez aussi voter pour les plats que vous avez essayé.
 
 #VosParametres
 La fenêtre de paramètres vous permet d’accéder aux différents paramètres du logiciel tel que la langue d’affichage et faire la gestion de la connexion au serveur de base de données.
@@ -99,27 +106,27 @@ Dans la section Général il est possible pour l’utilisateur de changer la lan
 Votre compte de membre enregistre votre paramètre de langue d’affichage. Si vous vous connecter à votre compte, l’interface sera changé automatiquement à votre langue de préférence. Si vous changé le paramètre de langue d’affichage une fois connecté, le changement sera enregistré à votre compte.
 Connexion
 La section Connexion est désactivée si l’Utilisateur n’est pas connecté à un compte administrateur. Si la base de données Nutritia est déployée à plusieurs localisations, ce dernier peut utiliser ce paramètre pour enregistrer une nouvelle session et se connecter à un serveur différent. L’écran est divisé est plusieurs sections : 
-	1. Sessions
+1. Sessions
 Cette section contient une liste des sessions enregistrées dans vos paramètres. Il est possible de sélectionner une session pour la charger, la supprimer ou se connecter sur celle-ci. La session actuellement utilisé est en gras.
-	2. Connexion
+2. Connexion
 Le bouton Connexion permet de se connecter à la session sélectionnée. Avant que le système permette de le faire, la nouvelle session est d’abord testée. À savoir si le compte membre existe sur le serveur de base de données (Un nom d’utilisateur et mot de passe sont suffisant pour admettre que l’utilisateur dispose d’un accès.) et si le compte dispose des droits d’administrateur. Selon quoi un message d’erreur sera affiché. Une fois la nouvelle connexion établis, la session choisie aura son nom en gras.
-	3. Chargement
+3. Chargement
 Le bouton Chargement remplis les champs de saisies selon les informations enregistrés dans la session sélectionnée.
-	4. Sauvegarde
+4. Sauvegarde
 Le bouton Sauvegarde permet d’enregistrer une nouvelle session dans les paramètres. Il suffit de remplir les champs de saisies et d’appuyer sur le bouton. Il est impossible de créer une nouvelle session si les champs sont vides. Le seul champ optionnel est le champ du mot de passe. Il est impossible d’enregistrer une nouvelle session si elle contient déjà les mêmes informations qu’une session préalablement enregistrée. Une fois la session enregistrée, les champs sont automatiquement vidés, sauf pour numéro de port qui contient toujours une valeur par défaut.
-	5. Supprimer
+5. Supprimer
 Le bouton Supprimer permet de supprimer une session sélectionnée. Il est à noter que par mesure de sureté, il est impossible de supprimer la session actuellement active. Il est impossible de modifier une session déjà enregistrée. Il suffit de charger une session en mémoire, en modifier le ou les champs et de l’enregistrer pour ensuite s’y connecter. Il ne reste qu’à supprimer l’ancienne session.
-	6. Nom d’hôte
+6. Nom d’hôte
 Le nom d’hôte ou l’adresse IP du serveur de base de données.
-	7. Port
+7. Port
 Le port du serveur de base de données. Par défaut le champ est à 3306, le port par défaut pour MySQL.
-	8. Nom d’utilisateur
+8. Nom d’utilisateur
 Le nom d’utilisateur du compte qui a accès au serveur de base de données. À ne pas confondre avec un compte membre Nutritia. Un compte membre Nutritia réside dans la base de données.
-	9. Mot de passe
+9. Mot de passe
 Mot de passe de l’utilisateur du compte qui a accès au serveur de base de données. À ne pas confondre avec un compte membre Nutritia. Un compte membre Nutritia réside dans la base de données. Ce champ est optionnel.
-	10. Nom de session
+10. Nom de session
 Un nom convivial sous lequel une session sera enregistrée. Le nom sera affiché dans la liste de sessions.
-	11. Nom de la base de données
+11. Nom de la base de données
 Le nom de la base de données Nutritia résidant dans le serveur de base de données. Connu aussi sous le nom de schéma.
 
 #SeConnecter
@@ -133,37 +140,54 @@ S’inscrire
 Le bouton « S’inscrire » permet à l’utilisateur de passer à la fenêtre de création de profil. À partir de cette fenêtre, il sera appelé à fournir diverses informations personnelles telles que son nom, prénom, mais aussi la taille et masse. Par ailleurs, il sera aussi possible de fournir de l’Information supplémentaire comme par exemple des préférences alimentaires (végétarien par exemple).
 
 #MenuAdmin
-Le menu administrateur permet à l’utilisateur d’accéder aux fonctionnalités réservées aux administrateurs. À partir de ce menu, il peut ainsi visiter la fenêtre de dons, de gestion des aliments et plats, de gestion des administrateurs et la fenêtre de bannissement de membres. Voir les sections Gestion des aliments et plats ainsi que celle de Bannissement des membres pour plus d’informations sur ces fonctionnalités.
+Le menu administrateur permet à l’utilisateur d’accéder aux fonctionnalités réservées aux administrateurs. 
+À partir de ce menu, il peut ainsi visiter :
+1.  La fenêtre de dons
+2.  La fenêtre de gestion des aliments et plats
+3.  La fenêtre de gestion des administrateurs 
+4.  La fenêtre de bannissement de membres.
+Voir les sections Gestion des aliments et plats ainsi que celle de Bannissement des membres pour plus d’informations sur ces fonctionnalités.
 
 #Votes
-L'écran de votes propose différents filtres d'affichage des plats. Le premier bouton permet d'afficher l'ensemble des plats, le deuxième permet d'afficher les nouveautés alors que le dernier permet l'affichage des plus populaires. La barre de recherche permet de rechercher un plat en particulier par son nom. De plus, elle s’effectue dans le filtre actuel. Par exemple, si l’utilisateur est actuellement dans les plats les plus populaires, la recherche s’effectuera sur ceux-ci.
-Le champ de saisie Nombre de résultats a un effet sur les boutons (Filtres) nouveautés et plus populaires. En fait, l’utilisateur doit entrer un chiffre dans ce champ et lorsqu’il appuie sur un des deux boutons, le nombre de plats affichés par défaut (dix) sera changé pour celui qui vient d’être entré.
-Pour chaque plat affiché dans la section du bas, son nom, son image ainsi que des informations sur celui-ci comme sa note courante (Moyenne de toutes les notes) ou encore son créateur sont affichés.
-Pour passer au vote, appuyez sur le bouton coeur. Vous pourrez choisir une note dans la liste déroulante et confirmer son vote en appuyant sur le bouton Confirmer ou encore annuler en appuyant sur le bouton Annuler. Lorsqu’un membre passe au vote, en temps réel, tous les autres membres étant dans la fenêtre de votes verront leur écran se rafraîchir pour afficher la nouvelle note des plats.
+1.  Filtre permettant l’affichage de tous les plats
+L’ensemble des plats s’afficheront dans la section du bas en ordre alphabétique.
+2.  Filtre permettant l’affichage des nouveautés
+Par défaut, les dix plats les plus récents s’afficheront dans la section du bas.
+3.  Filtre permettant l’affichage des plats les plus populaires
+Par défaut, les dix plats les plus populaires (Meilleures notes) s’afficheront dans la section du bas.
+4.  Barre de recherche
+La barre de recherche permet de rechercher un plat en particulier par son nom. De plus, elle s’effectue dans le filtre actuel. Par exemple, si l’utilisateur est actuellement dans les plats les plus populaires, la recherche s’effectuera sur ceux-ci.
+5.  Nombre de résultats
+Ce champ a un effet sur les boutons (Filtres) nouveautés et plus populaires. En fait, l’utilisateur doit entrer un chiffre dans ce champ et lorsqu’il appuie sur un des deux boutons, le nombre de plats affichés par défaut (dix) sera changé pour celui qui vient d’être entré.
+6.  Nom du plat
+Le nom du plat est affiché.
+7.  Image du plat
+Un aperçu du plat est affiché.
+8.  Informations sur le plat
+Cette section affiche la note courante du plat (Moyenne de toutes les notes), le nombre de votes ainsi que l’auteur du plat (Le membre ayant ajouté le plat).
+9.  Ingrédients
+Essentiellement, le bouton agit exactement de la même façon que dans le menu. Voir la section Menu & Liste d’épicerie (section Menus) pour de plus amples détails.
+10. Voter sur un plat
+En appuyant sur le bouton cœur, cette fenêtre apparaîtra. L’utilisateur peut choisir une note dans la liste déroulante et confirmer son vote en appuyant sur le bouton Confirmer ou encore annuler en appuyant sur le bouton Annuler. Lorsqu’un membre passe au vote, en temps réel, tous les autres membres étant dans la fenêtre de votes verront leur écran se rafraîchir pour afficher la nouvelle note des plats.
 
 #GestionAlimentsPlats
 L’écran de gestion des aliments et des plats, offre quatre différents contextes d’utilisation. Afin de simplifier au maximum le présent guide, seuls les contextes de modification d’aliments et de plats seront élaborés en détails. Ceci étant, il s’agit des mêmes sous-écrans que pour les contextes d’ajout à la différence près que ceux-ci offrent en sus une barre de recherche.
 Contexte d’ajout/modification d’aliments
-
 1.	Informations relatives à l’aliment
 Ici, on retrouve les informations courantes relatives à l’aliment. Ceci inclus le nom de celui-ci, mais aussi la catégorie auquel il appartient, sans parler de son unité de mesure et ses valeurs nutritionnelles. Les valeurs nutritionnelles plus particulièrement serviront aux calculs de la calculatrice nutritionnelle. Se référer à la section Calculatrice nutritionnelle pour plus de détails.
 2.	Ajout d’une image
 Ce bouton permet à l’utilisateur d’ajouter et d’associer une image à l’aliment en cours de création ou modification. En cas de succès de l’opération, l’image sera affichée à gauche du bouton en question.
- 
 3.	Modifier/Créer l’aliment
 Ce bouton a pour effet de créer ou modifier l’aliment courant le cas échéant. Il permet aussi de confirmer le contenu des différents champs de saisies, mais aussi des sélections requises comme la catégorie alimentaire. Par ailleurs, si l’unité de mesure choisie pour l’aliment est « gramme » ou « millilitre », le total des valeurs nutritionnelles sera comparé à la mesure de l’aliment. Ainsi, il est impossible d’ajouter une simple pomme de 100 g avec une teneur en fibres de 500 g. 
 Contexte d’ajout/modification d’un plat
- 
 1.	Informations relatives au plat
 Dans cette partie du sous-écran, on retrouve les informations courantes relatives au plat. Ceci inclus le nom de celui-ci, mais aussi le type auquel il appartient. Tout comme pour les contextes d’ajout et de modification d’aliments, il est aussi possible de fournir une image pour un plat.
- 
 2.	Confirmer l’ajout/modification
 Le bouton de confirmation permet de créer ou modifier le plat courant. Il permet aussi de confirmer le contenu des différents champs de saisies, mais aussi des sélections requises comme le type de plat. Il est d’ailleurs impossible de créer un plat sans lui assigner au moins un aliment pour la composition.
 3.	Accordéon d’aliments
 L’accordéon contient la liste de tous les aliments présents dans la base de données utilisée actuellement par l’application. Cet accordéon regroupe aussi tous ces aliments par catégories alimentaires. Si l’utilisateur clique sur un aliment, ceci ajoute alors cet aliment dans la composition du plat, plus bas. Si cet aliment est déjà présent dans la composition du plat, un multiplicateur apparaît près du nom de l’aliment, signalant alors la quantité pour cet aliment.
 4.	Composition du plat
 La composition du plat est essentiellement une liste d’aliments composant le plat courant. Ceci permet à l’utilisateur de connaître le contenu d’un plat, mais aussi de modifier ce dernier en retirant ou modifiant les quantités d’aliments. Un clic sur un aliment dans la composition du plat a pour effet de réduire la valeur du multiplicateur (quantité) pour cet aliment. Si cet aliment n’a plus de multiplicateur, alors ce dernier est simplement retiré de la liste.
-
 #AdminDons
 La fenêtre de dons permet à un administrateur de voir tous les dons qui ont été envoyés à l’équipe de développement Nutritia. Les informations disponibles sont la date de la transaction, le nom du propriétaire de la carte, le type de carte utilisé et le montant du don.
 
@@ -175,6 +199,5 @@ Une barre de recherche est disponible pour aider l’administrateur dans sa rech
 La liste de membres affiche tous les membres. Le nom d’utilisateur (compte) est affiché, ainsi que son statut d’administrateur sous forme d’une boite à cocher. Si la barre de recherche est utilisée, la liste contiendra les comptes qui correspondent à la recherche.
 3.	Liste d’administrateurs
 Cette liste contient uniquement les membres qui sont administrateurs. Si une case à cocher est cochée/décochée, le contenu de la liste d’administrateurs et de la liste de membres s’actualiseront pour refléter le changement.
-
 4.	Information du membre
 La boite d’information du membre affiche les informations de bases d’un compte sélectionné dans la liste de membres. Le nom d’utilisateur, le prénom, le nom et l’âge sont affichés. Ces informations sont suffisantes pour déterminer le propriétaire du compte et s’assurer que le bon compte est promu en tant qu’administrateur.

@@ -62,7 +62,11 @@
         </GroupBox>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Name="btnSauvegarder" Width="25" Height="25" Margin="0, 0, 12.5, 0" IsEnabled="False" Click="btnSauvegarder_Click">
-                <Image Source="pack://application:,,,/UI/Images/disquetteIcon.png"></Image>
+                <Image Source="pack://application:,,,/UI/Images/disquetteIcon.png">
+                    <Image.ToolTip>
+                        <ToolTip Style="{StaticResource toolTipNutritia}" Content="{Resx ResxName=Nutritia.UI.Ressources.Localisation.FenetreGenerateurMenus, Key=SauvegarderMenu}"></ToolTip>
+                    </Image.ToolTip>
+                </Image>
             </Button>
             <Button Name="btnOuvrirMenu" Style="{StaticResource btnTexte}" Width="180" Height="25" Margin="0, 0, 12.5, 0" IsEnabled="False" Click="btnOuvrirMenu_Click" Content="{Resx OuvrirMenu}" />
             <Button Name="btnGenerer" Style="{StaticResource btnTexte}" Width="180" Height="25" Margin="0, 0, 12.5, 0" Click="btnGenerer_Click" Content="{Resx Generer}" />
@@ -135,7 +139,11 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Name="btnRegenerer" Width="45" Height="45" Click="btnRegenerer_Click">
-                                            <Image Source="pack://application:,,,/UI/Images/regenererIcon.png"></Image>
+                                            <Image Source="pack://application:,,,/UI/Images/regenererIcon.png">
+                                                <Image.ToolTip>
+                                                    <ToolTip Style="{StaticResource toolTipNutritia}" Content="{Resx ResxName=Nutritia.UI.Ressources.Localisation.FenetreGenerateurMenus, Key=RegenererPlat}"></ToolTip>
+                                                </Image.ToolTip>
+                                            </Image>
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}">
                                                     <Style.Triggers>

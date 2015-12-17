@@ -85,6 +85,9 @@ namespace Nutritia.UI.Views
 
         }
 
+        /// <summary>
+        /// Transverse le texte contenu dans le fichier texte a la bonne section jusqu'a l'écran
+        /// </summary>
         void AppliquerText()
         {
             // Placer tous le contenu du fichier en mémoire dans une liste de ligne
