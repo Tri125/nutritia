@@ -11,6 +11,13 @@ pour faire votre liste d’épicerie.
 L'application inclus un guide d'utilisateur et la majorité des fenêtres sont disponibles en anglais.
 Pour changer de langue, allez dans la fenêtre des paramètres.
 
+Un compte administrateur est créé avec la base de données:
+
+| Nom de compte | Mot de passe  |
+| ------------- |:-------------:|
+| admin         | admin         |
+
+
 ### Progression du travail
 
 [![Throughput Graph](https://graphs.waffle.io/nutritia/nutritia/throughput.svg)](https://waffle.io/nutritia/nutritia/metrics)
